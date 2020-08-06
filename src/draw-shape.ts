@@ -1,6 +1,17 @@
 import {indexedPoint, range} from './draw-util';
 import {endCapDirection} from './draw-line';
 
+
+// var symbolPathData = {
+//   circle:d3.symbol().type(d3.symbolCircle).size(shapeSize)(),
+//   square:d3.symbol().type(d3.symbolSquare).size(shapeSize)(),
+//   triangle:d3.symbol().type(d3.symbolTriangle).size(shapeSize)(),
+//   cross:d3.symbol().type(d3.symbolCross).size(shapeSize)(),
+//   diamond:d3.symbol().type(d3.symbolDiamond).size(shapeSize)(),
+//   star:d3.symbol().type(d3.symbolStar).size(shapeSize)(),
+//   wye:d3.symbol().type(d3.symbolWye).size(shapeSize)()
+// }
+
 /**
  * Like a circle.
  * 
@@ -131,28 +142,28 @@ export const circle = (radius: number, spin = 0, x = 0, y = 0, centered = true) 
 };
 
 /**
- * A 'semicircle' from current point.
+ * A 'semicircle' shape.
  * 
  * @param radius 
  * @param spin 
  * @param mirror 
  * @param flip 
  */
-export const semicircle = (radius:number, spin = 0, mirror = false, flip = false, x = 0, y = 0, centered = true) => {
-  const centerX = centered ? x : x + radius;
-  const centerY = centered ? y : y + radius;
+export const semicircle = (radius:number, spin = 0, mirror = false, flip = false) => {
 
   const sweep = mirror ? 0 : 1;
 
   const dx = radius * Math.cos(spin);
-  const tx = flip ? dx: centerX - dx ;
+  const tx = flip ? dx: - dx ;
 
   const dy = radius * Math.sin(spin)
-  const ty = flip ? centerY - dy : dy;
+  const ty = flip ? - dy : dy;
 
   return `
-  M ${centerX + tx}, ${centerY - ty}
-  a ${radius} ${radius} 0 0 ${sweep} ${-tx*2} ${ty*2}`
+  m ${tx}, ${-ty}
+  a ${radius} ${radius} 0 0 ${sweep} ${-tx*2} ${ty*2}
+  m ${tx}, ${-ty}
+  `
 }
 
 /**

@@ -8,11 +8,11 @@ import {dot}   from '../src/draw-shape';
 import {DisplaySVG} from '../src/display-svg';
 
 const defaultPoints = 6;
-const defaultSize = 1;
+const defaultSize = 8;
 const defaultSpin = (Math.PI);
 
 export default {
-  title: 'Shapes/Point with Dot',
+  title: 'Lines/Point with Dot',
   component: point,
   decorators: [withKnobs]
 };

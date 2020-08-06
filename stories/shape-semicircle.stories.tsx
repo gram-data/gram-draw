@@ -2,10 +2,11 @@ import React from 'react';
 
 import { withKnobs, number } from '@storybook/addon-knobs';
 
+import {point} from '../src/draw-line';
 import {semicircle} from '../src/draw-shape';
 import {DisplaySVG} from '../src/display-svg';
 
-const defaultPoints = 6;
+const canvasSize = 800;
 const defaultSize = 100;
 const defaultSpin = (Math.PI);
 
@@ -16,7 +17,7 @@ export default {
 };
 
 
-export const centered_semi_circle = () => {
+export const single_semi_circle = () => {
   const radius = number('radius', defaultSize, {
     range: true,
     min: 10,
@@ -29,27 +30,40 @@ export const centered_semi_circle = () => {
     max: Math.PI,
     step: (Math.PI/12),
   });
-  const path = semicircle(radius, spin);
+  const origin = point(canvasSize/2, canvasSize/2)
+  const path = `
+    ${origin}
+    ${semicircle(radius, spin)}
+    `;
 
-  return (<DisplaySVG size={2*radius}><path d={path}/></DisplaySVG> )
-  
+    return (<DisplaySVG size={canvasSize}><path d={path}/></DisplaySVG> )
 };
 
-export const top_left_semi_circle = () => {
+export const two_semicircle = () => {
   const radius = number('radius', defaultSize, {
     range: true,
     min: 10,
     max: 200,
     step: 10
   });
-  const spin = number('Spin', defaultSpin, {
+  const spin1 = number('Spin 1', defaultSpin, {
     range: true,
     min: 0,
     max: Math.PI,
     step: (Math.PI/12),
   });
-  const path = semicircle(radius, spin, false, false, 0, 0, false);
+  const spin2 = number('Spin 2', defaultSpin/3, {
+    range: true,
+    min: 0,
+    max: Math.PI,
+    step: (Math.PI/12),
+  });
+  const origin = point(canvasSize/2, canvasSize/2)
+  const path = `
+    ${origin}
+    ${semicircle(radius, spin1)}
+    ${semicircle(radius, spin2)}
+    `;
 
-  return (<DisplaySVG size={2*radius}><path d={path}/></DisplaySVG>)
-
+  return (<DisplaySVG size={canvasSize}><path d={path}/></DisplaySVG> )
 };

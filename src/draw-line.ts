@@ -4,6 +4,17 @@ export type endCapDirection = 'outer' | 'inner' | 'left' | 'right';
 
 export type endCapStyle = 'semicircle' | 'square' | 'angle'
 
+
+const debug = (radius = 1) => {
+  const r = Math.max(1, radius);
+  return `
+    m 0, ${-r}
+    a ${r} ${r} 0 0 1 0 ${r * 2}
+    a ${r} ${r} 0 0 1 0 ${-r * 2}
+    m 0, ${r}
+    `
+};
+
 /**
  * A 'point' which is in visible.
  * 
@@ -17,88 +28,145 @@ export const point = (x = 0, y = 0) => {
 
 
 /**
- * A 'vector' line draws a line from the center to the circumference of a circle,
- * without returning.
+ * A 'vector' line draws a straight line segment.
  * 
  * @param length 
- * @param spin 
+ * @param direction 
  */
-export const vector = (length: number, spin = 0) => {
-  const tx = length * Math.cos(spin);
-  const ty = length * Math.sin(spin);
+export const vector = (length: number, direction:number) => {
+  const tx = length * Math.cos(direction);
+  const ty = length * Math.sin(direction);
   return `l ${tx},${ty}`
+}
+
+/**
+ * A 'bend' turn uses an arc to reach the end point
+ * 
+ * @param length straight-line distance to end of turn
+ * @param direction straight-line angle to end of turn
+ * @param fraction turn fraction
+ * @param mirror 
+ * @param flip 
+ */
+export const bend = (length: number, direction:number, fraction = 1, mirror = false) => {
+
+  const sweep = mirror ? 0 : 1;
+
+  const tx = length * Math.cos(direction);
+  const ty = length * Math.sin(direction);
+  // arcRadius = a = b = r
+  // length = c
+  // c^2 = a^2 - 2ab*cos𝛳
+  // c   = √ (r^2 - 2rr cos𝛳)
+  // c^2 = r^2 - 2rr*cos𝛳
+  // c^2/cos𝛳 = r^2 - 2rr*cor
+
+  // isoceles triangle law of cosines
+  // cos 𝛾 = 1 - (c^2 / 2*a^2)
+  // c^2 = 2a^2(1 - cos 𝛾)
+  // (c^2) / (1 - cos 𝛾) = 2a^2
+  // ((c^2) / (1 - cos 𝛾))/2 = a^2
+  // √(((c^2) / (1 - cos 𝛾))/2) = a
+  const c = length;
+  const a = Math.sqrt(((c*c)/(1- Math.cos(Math.PI/fraction)))/2)
+
+  const arcRadius = a;
+
+  return `
+  a ${arcRadius} ${arcRadius} ${Math.PI-direction} ${0} ${sweep} ${tx} ${ty}`
 }
 
 
 /**
- * A 'bisegment' is the middle segment of two parallel, horizontally aligned
- * circle chords of equal size.
- *
- * Or, the intersection of a rectangle and a circle that have the same center,
- * where the rectangle width is equal to the circle diameter.
- *
- *
- * @param radius the radius of the bisegmented circle
- * @param height the height of the bisegment
- * @param capDirection the end-cap style: 'outer' | 'inner' | 'left' | 'right'
- * @param x optional x coordinate
- * @param y optional y coordinate
- * @param centered whether x,y coordinates are center or top-left
- */
-export const bisegment = (
-  radius: number,
-  height: number,
-  capDirection: endCapDirection = 'outer',
-  x = 0,
-  y = 0,
-  centered = true
-) => {
-  const centerX = centered ? x : x + radius;
-  const centerY = centered ? y : y + height / 2;
-
-  const ty = height / 2;
-  const tx = Math.sqrt(Math.pow(radius, 2) - Math.pow(ty, 2));
-  const rightSide =
-    capDirection === 'outer' || capDirection === 'right'
-      ? `a ${radius} ${radius} 0 0 1 0 ${ty * 2}`
-      : `a ${radius} ${radius} 0 0 0 0 ${ty * 2}`;
-  const leftSide =
-    capDirection === 'outer' || capDirection === 'left'
-      ? `a ${radius} ${radius} 0 0 1 0 ${-ty * 2}`
-      : `a ${radius} ${radius} 0 0 0 0 ${-ty * 2}`;
-
-  return `M ${centerX - tx},${centerY - ty} 
-        h ${tx * 2}
-        ${rightSide}
-        h ${-tx * 2}
-        ${leftSide}
-        `;
-};
-
-
-/**
- * A 'semicircle' from current point.
+ * A 'bank' turn use two equal line segments to reach the endpoint
  * 
- * @param radius 
- * @param spin 
+ * @param length straight-line distance to end of turn
+ * @param direction straight-line angle to end of turn
+ * @param fraction turn fraction
  * @param mirror 
  * @param flip 
  */
-export const semicircle = (radius:number, spin = 0, mirror = false, flip = false, x = 0, y = 0, centered = true) => {
-  const centerX = centered ? x : x + radius;
-  const centerY = centered ? y : y + radius;
+export const bank = (length: number, direction:number, fraction = 1, mirror = false) => {
 
-  const sweep = mirror ? 0 : 1;
+  // arcRadius = a = b = r
+  // length = c
+  // c^2 = a^2 - 2ab*cos𝛳
+  // c   = √ (r^2 - 2rr cos𝛳)
+  // c^2 = r^2 - 2rr*cos𝛳
+  // c^2/cos𝛳 = r^2 - 2rr*cor
 
-  const dx = radius * Math.cos(spin);
-  const tx = flip ? dx: centerX - dx ;
+  // isoceles triangle law of cosines
+  // cos 𝛾 = 1 - (c^2 / 2*a^2)
+  // c^2 = 2a^2(1 - cos 𝛾)
+  // (c^2) / (1 - cos 𝛾) = 2a^2
+  // ((c^2) / (1 - cos 𝛾))/2 = a^2
+  // √(((c^2) / (1 - cos 𝛾))/2) = a
+  const c = length;
+  const r = Math.sqrt(((c*c)/(1- Math.cos(Math.PI/fraction)))/2)
 
-  const dy = radius * Math.sin(spin)
-  const ty = flip ? centerY - dy : dy;
+  const d = length/2;
+  const e = Math.sqrt(r*r - d*d)
+  const f = r - e;
+  const g = Math.sqrt(d*d + f*f);
+  const retraction = Math.atan(f/d);
+  const incline = mirror ? direction + retraction : direction - retraction;
+  const midX = g * Math.cos(incline);
+  const midY = g * Math.sin(incline);
+  const decline = mirror ? direction - retraction : direction + retraction;
+  const endY = g * Math.sin(decline);
+  const endX = g * Math.cos(decline);
 
   return `
-  M ${centerX + tx}, ${centerY - ty}
-  a ${radius} ${radius} 0 0 ${sweep} ${-tx*2} ${ty*2}`
+  l ${midX} ${midY}
+  ${debug()}
+  l ${endX} ${endY}`
+}
+
+
+/**
+ * A 'halfsquare' turn forms a half-box
+ * 
+ * @param length straight-line distance to end of turn
+ * @param direction straight-line angle to end of turn
+ * @param fraction turn fraction
+ * @param mirror 
+ * @param flip 
+ */
+export const halfsquare = (length: number, direction:number, fraction = 1, mirror = false) => {
+
+  // arcRadius = a = b = r
+  // length = c
+  // c^2 = a^2 - 2ab*cos𝛳
+  // c   = √ (r^2 - 2rr cos𝛳)
+  // c^2 = r^2 - 2rr*cos𝛳
+  // c^2/cos𝛳 = r^2 - 2rr*cor
+
+  // isoceles triangle law of cosines
+  // cos 𝛾 = 1 - (c^2 / 2*a^2)
+  // c^2 = 2a^2(1 - cos 𝛾)
+  // (c^2) / (1 - cos 𝛾) = 2a^2
+  // ((c^2) / (1 - cos 𝛾))/2 = a^2
+  // √(((c^2) / (1 - cos 𝛾))/2) = a
+  const c = length;
+  const r = Math.sqrt(((c*c)/(1- Math.cos(Math.PI/fraction)))/2)
+
+  const d = length/2;
+  const e = Math.sqrt(r*r - d*d)
+  const f = r - e;
+  const startX = (mirror ? f : -f) * Math.cos(Math.PI/2 + direction);
+  const startY = (mirror ? f : -f) * Math.sin(Math.PI/2 + direction);
+  const tx = length * Math.cos(direction);
+  const ty = length * Math.sin(direction);
+  const endX = (mirror ? -f : f) * Math.cos(Math.PI/2 + direction);
+  const endY = (mirror ? -f : f) * Math.sin(Math.PI/2 + direction);
+
+
+  return `
+  l ${startX} ${startY}
+  ${debug()}
+  l ${tx} ${ty}
+  ${debug()}
+  l ${endX} ${endY}`
 }
 
 
@@ -163,8 +231,8 @@ export const bracket = (
   width: number,
   capDirection: endCapDirection = 'outer',
   capStyle: endCapStyle = 'semicircle',
-  x = 0,
-  y = 0
+  x=0,
+  y=0
 ) => {
 
 
@@ -173,67 +241,25 @@ export const bracket = (
   const a = Math.sqrt(Math.pow(deltaX, 2) + Math.pow(deltaY, 2));
   const radius = width / 2;
   const decline = Math.asin(deltaY / a);
-  const normal = Math.PI / 2 - decline;
-  const rightSide = 
-    (capStyle === 'semicircle') 
-    ? semicircle(radius, normal, capDirection === 'inner' || capDirection === 'left')
-    : semicircle(radius, normal, true);
-  const leftSide =
-    (capStyle === 'semicircle') 
-    ? semicircle(radius, normal, capDirection === 'inner' || capDirection === 'right', true)
-    : semicircle(radius, normal, true);
-    // capDirection === 'outer' || capDirection === 'left'
-    //   ? `a ${radius} ${radius} 0 0 1 ${tx * 2} ${-ty * 2}`
-    //   : `a ${radius} ${radius} 0 0 0 ${tx * 2} ${-ty * 2}`;
+  // const normal = Math.PI / 2 - decline;
+  // const rightSide = 
+  //   (capStyle === 'semicircle') 
+  //   ? arc(radius, normal, radius, capDirection === 'inner' || capDirection === 'left')
+  //   : arc(radius, normal, radius, true);
+  // const leftSide =
+  //   (capStyle === 'semicircle') 
+  //   ? arc(radius, normal, radius, capDirection === 'inner' || capDirection === 'right', true)
+  //   : arc(radius, normal, radius, true);
+  //   // capDirection === 'outer' || capDirection === 'left'
+  //   //   ? `a ${radius} ${radius} 0 0 1 ${tx * 2} ${-ty * 2}`
+  //   //   : `a ${radius} ${radius} 0 0 0 ${tx * 2} ${-ty * 2}`;
 
-  return `M ${x},${y} 
-        l ${deltaX}, ${deltaY}
-        ${rightSide}
-        l ${-deltaX}, ${-deltaY}
-        ${leftSide}
-        `;
+  // return `m ${x},${y} 
+  //       l ${deltaX}, ${deltaY}
+  //       ${rightSide}
+  //       l ${-deltaX}, ${-deltaY}
+  //       ${leftSide}
+  //       `;'
+  return bend(radius, decline);
 };
 
-/**
- * A pointed rectangle.
- *
- * @param width width (excluding pointed caps)
- * @param height 
- * @param capDirection the end-cap style: 'outer' | 'inner' | 'left' | 'right'
- * @param peak pointiness
- * @param x optional x coordinate
- * @param y optional y coordinate
- * @param centered whether x,y coordinates are center or top-left
- */
-export const pointed = (
-  width: number,
-  height: number,
-  capDirection: endCapDirection = 'outer',
-  peak?: number,
-  x = 0,
-  y = 0,
-  centered = true
-) => {
-  const p = peak || height /2;
-  const centerX = centered ? x : x + width / 2;
-  const centerY = centered ? y : y + height / 2;
-
-  const ty = height / 2;
-  const tx = (width-2*p)/2;
-
-  const rightSide =
-    capDirection === 'outer' || capDirection === 'right'
-      ? `l ${p} ${ty} l ${-p} ${ty}`
-      : `l ${-p} ${ty} l ${p} ${ty}`;
-  const leftSide =
-    capDirection === 'outer' || capDirection === 'left'
-      ? `l ${-p} ${-ty} l ${p} ${-ty}`
-      : `l ${p} ${-ty} l ${-p} ${-ty}`;
-
-  return `M ${centerX - tx},${centerY - ty} 
-        h ${tx*2}
-        ${rightSide}
-        h ${-tx * 2}
-        ${leftSide}
-        `;
-};
