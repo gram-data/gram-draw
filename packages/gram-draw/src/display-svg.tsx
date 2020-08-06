@@ -1,4 +1,6 @@
-import React from 'react';
+/** @jsx jsx */
+import { jsx, useColorMode, useThemeUI } from 'theme-ui';
+
 import { BorderStyleProperty, ColorProperty } from 'csstype';
 
 const dashArrayForPattern = (pattern:BorderStyleProperty) => {
@@ -17,6 +19,7 @@ const dashArrayForPattern = (pattern:BorderStyleProperty) => {
 interface DisplaySVGProps  {
   size: number; 
   fill?:ColorProperty;
+  strokeColor?: ColorProperty;
   strokeWidth?: number;
   strokePattern?: BorderStyleProperty; 
 }
@@ -24,16 +27,23 @@ interface DisplaySVGProps  {
 export const DisplaySVG: React.FC<DisplaySVGProps> = ({
   size,
   fill = 'green',
+  strokeColor = 'gray',
   strokeWidth = 2,
   strokePattern = 'dotted',
   children,
 }) => {
+  const context = useThemeUI()
+  const [colorMode] = useColorMode()
+
+  console.log(context);
+  console.log(colorMode);
+
   return (
     <div style={{ width: `${size}px`, height: `${size}px` }}>
       <svg
         viewBox={`-${strokeWidth} -${strokeWidth} ${size +
           strokeWidth * 2} ${size + strokeWidth * 2}`}
-        stroke="red"
+        stroke={strokeColor}
         strokeWidth={strokeWidth}
         strokeLinecap="round"
         strokeDasharray={dashArrayForPattern(strokePattern)}

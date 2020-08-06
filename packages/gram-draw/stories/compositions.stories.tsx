@@ -4,7 +4,7 @@ import { withKnobs, number } from '@storybook/addon-knobs';
 
 // import {range} from '../src/draw-util';
 import {point, vector} from '../src/draw-line';
-import {dot, radius, diameter, rect} from '../src/draw-shape';
+import {dot, diameter, rect} from '../src/draw-shape';
 import {DisplaySVG} from '../src/display-svg';
 
 export default {

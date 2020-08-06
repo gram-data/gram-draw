@@ -12,7 +12,7 @@ export default {
 };
 
 
-export const default_stadium = () => {
+export const semicircle_endcaps = () => {
 
   const width = number('width', 40, {
     range: true,

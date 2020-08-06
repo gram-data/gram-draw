@@ -6,7 +6,7 @@ import {bracket} from '../src/draw-line';
 import {DisplaySVG} from '../src/display-svg';
 
 export default {
-  title: 'Shapes/Bracket',
+  title: 'Lines/Bracket',
   component: bracket,
   decorators: [withKnobs]
 };
