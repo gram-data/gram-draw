@@ -3,7 +3,7 @@ import React from 'react';
 import { withKnobs, number, select } from '@storybook/addon-knobs';
 
 import {bracket} from '../src/draw-line';
-import {DisplaySVG} from '../src/display-svg';
+import {DisplaySVG} from './display-svg';
 
 export default {
   title: 'Lines/Bracket',

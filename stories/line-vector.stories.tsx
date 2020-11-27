@@ -5,7 +5,7 @@ import { withKnobs, number } from '@storybook/addon-knobs';
 import {point, vector} from '../src/draw-line';
 import {range} from '../src/draw-util';
 
-import {DisplaySVG} from '../src/display-svg';
+import {DisplaySVG} from './display-svg';
 
 const defaultCount = 6;
 const defaultLength = 40;

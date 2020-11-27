@@ -22,7 +22,7 @@
     "deploy-storybook": "storybook-to-ghpages"
   },
   "peerDependencies": {
-    "react": ">=16"
+    "react": ">=17"
   },
   "husky": {
     "hooks": {
@@ -39,42 +39,39 @@
   "author": "Andreas Kollegger",
   "module": "dist/gram-draw.esm.js",
   "devDependencies": {
-    "@babel/core": "^7.10.2",
-    "@storybook/addon-actions": "^5.3.19",
-    "@storybook/addon-docs": "^5.3.19",
-    "@storybook/addon-info": "^5.3.19",
-    "@storybook/addon-knobs": "^5.3.19",
-    "@storybook/addon-links": "^5.3.19",
-    "@storybook/addons": "^5.3.19",
-    "@storybook/react": "^5.3.19",
-    "@storybook/storybook-deployer": "^2.8.6",
-    "@types/d3": "^5.7.2",
-    "@types/react": "^16.9.38",
-    "@types/react-dom": "^16.9.8",
-    "@types/theme-ui": "^0.3.4",
-    "babel-loader": "^8.1.0",
-    "csstype": "^2.6.10",
-    "faker": "^4.1.0",
-    "husky": "^4.2.5",
+    "@babel/core": "^7.12.9",
+    "@storybook/addon-actions": "^6.1.7",
+    "@storybook/addon-docs": "^6.1.7",
+    "@storybook/addon-info": "^5.3.21",
+    "@storybook/addon-knobs": "^6.1.7",
+    "@storybook/addon-links": "^6.1.7",
+    "@storybook/addons": "^6.1.7",
+    "@storybook/react": "^6.1.7",
+    "@storybook/storybook-deployer": "^2.8.7",
+    "@types/d3": "^6.2.0",
+    "@types/react": "^17.0.0",
+    "@types/react-dom": "^17.0.0",
+    "@types/theme-ui": "^0.3.7",
+    "babel-loader": "^8.2.2",
+    "csstype": "^3.0.5",
+    "faker": "^5.1.0",
+    "husky": "^4.3.0",
     "react": "^16.13.1",
     "react-docgen-typescript-loader": "^3.7.2",
-    "react-dom": "^16.13.1",
-    "react-is": "^16.13.1",
+    "react-dom": "^17.0.1",
+    "react-is": "^17.0.1",
     "react-rough": "^2.3.0",
     "roughjs": "^4.3.1",
     "storybook-addon-theme-ui": "^0.1.5",
-    "storybook-dark-mode": "^0.6.1",
-    "ts-loader": "^7.0.5",
-    "tsdx": "^0.13.2",
-    "tslib": "^2.0.0",
-    "typescript": "^3.9.5"
+    "storybook-dark-mode": "^1.0.3",
+    "ts-loader": "^8.0.11",
+    "tsdx": "^0.14.1",
+    "tslib": "^2.0.3",
+    "typescript": "^4.1.2"
   },
   "dependencies": {
-    "@theme-ui/color": "^0.3.1",
-    "@theme-ui/presets": "^0.3.0",
-    "d3-color": "^1.4.1",
-    "d3-scale-chromatic": "^1.5.0",
-    "d3-shape": "^1.3.7",
-    "theme-ui": "^0.3.1"
+    "d3-color": "^2.0.0",
+    "d3-scale-chromatic": "^2.0.0",
+    "d3-shape": "^2.0.0"
   }
 }

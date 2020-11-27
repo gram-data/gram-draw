@@ -4,7 +4,7 @@ import { withKnobs, number } from '@storybook/addon-knobs';
 
 import {point} from '../src/draw-line';
 import {semicircle} from '../src/draw-shape';
-import {DisplaySVG} from '../src/display-svg';
+import {DisplaySVG} from './display-svg';
 
 const canvasSize = 800;
 const defaultSize = 100;

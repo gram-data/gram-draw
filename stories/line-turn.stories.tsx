@@ -13,7 +13,7 @@ import {point, bend, bank, vector, halfsquare} from '../src/draw-line';
 import {dot} from '../src/draw-shape';
 import {range} from '../src/draw-util';
 
-import {DisplaySVG} from '../src/display-svg';
+import {DisplaySVG} from './display-svg';
 
 const width = 800;
 const defaultCount = 6;
