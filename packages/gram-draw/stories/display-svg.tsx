@@ -1,9 +1,8 @@
-/** @jsx jsx */
-import { jsx, useColorMode, useThemeUI } from 'theme-ui';
+import React from 'react';
 
-import { BorderStyleProperty, ColorProperty } from 'csstype';
+import * as CSS from 'csstype';
 
-const dashArrayForPattern = (pattern:BorderStyleProperty) => {
+const dashArrayForPattern = (pattern:CSS.Property.Border) => {
   switch (pattern) {
     case 'dashed':
       return '4,4'
@@ -18,10 +17,10 @@ const dashArrayForPattern = (pattern:BorderStyleProperty) => {
 
 interface DisplaySVGProps  {
   size: number; 
-  fill?:ColorProperty;
-  strokeColor?: ColorProperty;
+  fill?:CSS.Property.Color;
+  strokeColor?: CSS.Property.Color;
   strokeWidth?: number;
-  strokePattern?: BorderStyleProperty; 
+  strokePattern?: CSS.Property.Border; 
 }
 
 export const DisplaySVG: React.FC<DisplaySVGProps> = ({
@@ -32,11 +31,6 @@ export const DisplaySVG: React.FC<DisplaySVGProps> = ({
   strokePattern = 'dotted',
   children,
 }) => {
-  const context = useThemeUI()
-  const [colorMode] = useColorMode()
-
-  console.log(context);
-  console.log(colorMode);
 
   return (
     <div style={{ width: `${size}px`, height: `${size}px` }}>

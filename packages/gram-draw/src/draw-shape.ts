@@ -1,6 +1,5 @@
-import {indexedPoint, range} from './draw-util';
-import {endCapDirection} from './draw-line';
-
+import { indexedPoint, range } from './draw-util';
+import { endCapDirection } from './draw-line';
 
 // var symbolPathData = {
 //   circle:d3.symbol().type(d3.symbolCircle).size(shapeSize)(),
@@ -14,8 +13,8 @@ import {endCapDirection} from './draw-line';
 
 /**
  * Like a circle.
- * 
- * @param radius 
+ *
+ * @param radius
  */
 export const dot = (radius = 1) => {
   const r = Math.max(1, radius);
@@ -24,34 +23,33 @@ export const dot = (radius = 1) => {
     a ${r} ${r} 0 0 1 0 ${r * 2}
     a ${r} ${r} 0 0 1 0 ${-r * 2}
     m 0, ${r}
-    `
+    `;
 };
 
 /**
  * A 'radius' shape draws a line from the center to the circumference of a circle.
- * 
- * @param length 
- * @param spin 
+ *
+ * @param length
+ * @param spin
  */
 export const radius = (length: number, spin = 0) => {
   const tx = length * Math.cos(spin);
   const ty = length * Math.sin(spin);
-  return `l ${tx},${ty} m ${-tx}, ${-ty}`
-}
+  return `l ${tx},${ty} m ${-tx}, ${-ty}`;
+};
 
 /**
  * A 'diameter' shape is a chord which passes through a circle's center,
- * returning to the center. 
- * 
- * @param radius 
- * @param spin 
+ * returning to the center.
+ *
+ * @param radius
+ * @param spin
  */
 export const diameter = (radius: number, spin = 0) => {
   const tx = radius * Math.cos(spin);
   const ty = radius * Math.sin(spin);
-  return `m ${-tx},${-ty} l ${tx*2},${ty*2} m ${-tx}, ${-ty}`
-}
-
+  return `m ${-tx},${-ty} l ${tx * 2},${ty * 2} m ${-tx}, ${-ty}`;
+};
 
 /**
  * A 'rectangle' shape.
@@ -59,17 +57,14 @@ export const diameter = (radius: number, spin = 0) => {
  * @param width
  * @param height
  */
-export const rect = (
-  width: number,
-  height: number
-) => {
+export const rect = (width: number, height: number) => {
   return `
-  m ${ - width / 2}, ${ - height / 2}
+  m ${-width / 2}, ${-height / 2}
   h ${width}
   v ${height}
   h ${-width}
   z
-  m ${ + width/2}, ${ + height / 2}
+  m ${+width / 2}, ${+height / 2}
   `;
 };
 
@@ -127,7 +122,13 @@ export const bisegment = (
  * @param y optioanl y coordinate
  * @param centered whether x,y coordinates are center or top-left
  */
-export const circle = (radius: number, spin = 0, x = 0, y = 0, centered = true) => {
+export const circle = (
+  radius: number,
+  spin = 0,
+  x = 0,
+  y = 0,
+  centered = true
+) => {
   const centerX = centered ? x : x + radius;
   const centerY = centered ? y : y + radius;
 
@@ -143,28 +144,32 @@ export const circle = (radius: number, spin = 0, x = 0, y = 0, centered = true) 
 
 /**
  * A 'semicircle' shape.
- * 
- * @param radius 
- * @param spin 
- * @param mirror 
- * @param flip 
+ *
+ * @param radius
+ * @param spin
+ * @param mirror
+ * @param flip
  */
-export const semicircle = (radius:number, spin = 0, mirror = false, flip = false) => {
-
+export const semicircle = (
+  radius: number,
+  spin = 0,
+  mirror = false,
+  flip = false
+) => {
   const sweep = mirror ? 0 : 1;
 
   const dx = radius * Math.cos(spin);
-  const tx = flip ? dx: - dx ;
+  const tx = flip ? dx : -dx;
 
-  const dy = radius * Math.sin(spin)
-  const ty = flip ? - dy : dy;
+  const dy = radius * Math.sin(spin);
+  const ty = flip ? -dy : dy;
 
   return `
   m ${tx}, ${-ty}
-  a ${radius} ${radius} 0 0 ${sweep} ${-tx*2} ${ty*2}
+  a ${radius} ${radius} 0 0 ${sweep} ${-tx * 2} ${ty * 2}
   m ${tx}, ${-ty}
-  `
-}
+  `;
+};
 
 /**
  * A 'polygon' path.
@@ -190,7 +195,7 @@ export const polygon = (
   return (
     'M' +
     range(points)
-      .map(function(i) {
+      .map(function (i) {
         var point = indexedPoint(centerX, centerY, i, points, spin, radius);
         return point.x + ',' + point.y;
       })
@@ -198,7 +203,6 @@ export const polygon = (
     'z'
   );
 };
-
 
 /**
  * Star polygons
@@ -247,7 +251,7 @@ export const star = (
   return (
     'M' +
     range(vertices)
-      .map(function(i) {
+      .map(function (i) {
         var point = pointToCorner(
           centerX,
           centerY,
@@ -263,12 +267,11 @@ export const star = (
   );
 };
 
-
 /**
  * A pointed rectangle.
  *
  * @param width width (excluding pointed caps)
- * @param height 
+ * @param height
  * @param capDirection the end-cap style: 'outer' | 'inner' | 'left' | 'right'
  * @param peak pointiness
  * @param x optional x coordinate
@@ -284,12 +287,12 @@ export const pointed = (
   y = 0,
   centered = true
 ) => {
-  const p = peak || height /2;
+  const p = peak || height / 2;
   const centerX = centered ? x : x + width / 2;
   const centerY = centered ? y : y + height / 2;
 
   const ty = height / 2;
-  const tx = (width-2*p)/2;
+  const tx = (width - 2 * p) / 2;
 
   const rightSide =
     capDirection === 'outer' || capDirection === 'right'
@@ -301,7 +304,7 @@ export const pointed = (
       : `l ${p} ${-ty} l ${-p} ${-ty}`;
 
   return `M ${centerX - tx},${centerY - ty} 
-        h ${tx*2}
+        h ${tx * 2}
         ${rightSide}
         h ${-tx * 2}
         ${leftSide}
@@ -310,12 +313,12 @@ export const pointed = (
 
 /**
  * A 'squircle' shape.
- * 
+ *
  * https://en.wikipedia.org/wiki/Squircle
  */
 
- /**
-  * An 'ellipse' shape.
-  * 
-  * https://en.wikipedia.org/wiki/Ellipse
-  */
+/**
+ * An 'ellipse' shape.
+ *
+ * https://en.wikipedia.org/wiki/Ellipse
+ */

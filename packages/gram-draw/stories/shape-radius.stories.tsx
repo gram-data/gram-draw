@@ -6,7 +6,7 @@ import {range} from '../src/draw-util';
 import {point} from '../src/draw-line';
 import {radius} from '../src/draw-shape';
 
-import {DisplaySVG} from '../src/display-svg';
+import {DisplaySVG} from './display-svg';
 
 const defaultCount = 6;
 const defaultRadius = 40;

@@ -5,7 +5,7 @@ import { withKnobs, number } from '@storybook/addon-knobs';
 // import {range} from '../src/draw-util';
 import {point, vector} from '../src/draw-line';
 import {dot, diameter, rect} from '../src/draw-shape';
-import {DisplaySVG} from '../src/display-svg';
+import {DisplaySVG} from './display-svg';
 
 export default {
   title: 'Compositions',

@@ -3,7 +3,7 @@ import React from 'react';
 import { withKnobs, number, select } from '@storybook/addon-knobs';
 
 import {bisegment} from '../src/draw-shape';
-import {DisplaySVG} from '../src/display-svg';
+import {DisplaySVG} from './display-svg';
 
 const defaultSize = 100;
 

@@ -1,21 +1,5 @@
-import React, { HTMLAttributes } from 'react';
-
-export interface PathShapeProps extends HTMLAttributes<HTMLDivElement> {
-  x: number;
-  y: number;
-  width: number;
-  height: number;
-}
-
-export const PathShape: React.FC<PathShapeProps> = ({
-  x,
-  y,
-  width,
-  height,
-}) => <path d={circle(x, y, Math.max(width, height))} stroke="red" />;
-
 function range(size: number, startAt: number = 0): ReadonlyArray<number> {
-  return [...Array(size).keys()].map(i => i + startAt);
+  return [...Array(size).keys()].map((i) => i + startAt);
 }
 
 export const circle = (x: number, y: number, diameter: number) => {
@@ -66,7 +50,7 @@ export const polygon = (points: number, spin: number, size: number) => {
   return (
     'M' +
     range(points)
-      .map(function(i) {
+      .map(function (i) {
         var point = pointToCorner(i, points, spin, size);
         return point.x + ',' + point.y;
       })

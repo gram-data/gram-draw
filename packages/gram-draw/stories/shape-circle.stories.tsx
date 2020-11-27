@@ -3,7 +3,7 @@ import React from 'react';
 import { withKnobs, number } from '@storybook/addon-knobs';
 
 import {circle} from '../src/draw-shape';
-import {DisplaySVG} from '../src/display-svg';
+import {DisplaySVG} from './display-svg';
 
 const defaultPoints = 6;
 const defaultSize = 100;
